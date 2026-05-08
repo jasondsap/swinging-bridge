@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { Suspense, useState, type FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Apple, Loader2, Mail } from 'lucide-react';
@@ -12,7 +12,33 @@ import {
 } from '@/lib/auth/cognito';
 import { useAuth } from '@/components/auth/AuthProvider';
 
+/**
+ * Next.js 15 requires useSearchParams() in client components to be inside a
+ * Suspense boundary, otherwise static prerendering fails at build time.
+ * The outer component just renders the boundary; the inner does the actual work.
+ */
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginShell />}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginShell() {
+  return (
+    <div className="container-app py-10">
+      <h1
+        className="font-display text-2xl font-bold text-bridge-navy"
+        style={{ fontVariationSettings: '"opsz" 144, "SOFT" 50' }}
+      >
+        Sign in
+      </h1>
+    </div>
+  );
+}
+
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/';
@@ -28,7 +54,6 @@ export default function LoginPage() {
     setBusy(true);
     try {
       await signInWithApple();
-      // Web flow redirects away; native flow returns here once Cognito session exists.
       await refresh();
       router.push(redirectTo);
     } catch (err) {
@@ -62,7 +87,6 @@ export default function LoginPage() {
       router.push(redirectTo);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Sign-in failed';
-      // Friendlier copy for common Cognito errors
       if (/UserNotConfirmedException/i.test(message)) {
         setError(
           "Your email isn't verified yet. Check your inbox for a code, or sign up again to get a new one.",

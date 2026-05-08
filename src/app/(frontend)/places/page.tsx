@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { MapPin } from 'lucide-react';
 
@@ -15,7 +15,17 @@ import {
 import { getCurrentPosition } from '@/lib/capacitor';
 import { haversineMiles, cn } from '@/lib/utils';
 
+// Suspense wrapper required because useSearchParams() in client components
+// can't be statically prerendered. See Next.js 15 docs.
 export default function PlacesPage() {
+  return (
+    <Suspense fallback={null}>
+      <PlacesContent />
+    </Suspense>
+  );
+}
+
+function PlacesContent() {
   const searchParams = useSearchParams();
   const initialFilter = readFilterParam(searchParams?.get('filter'));
 

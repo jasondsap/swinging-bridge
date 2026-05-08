@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { Suspense, useState, type FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Apple, Loader2, Mail, MailCheck } from 'lucide-react';
@@ -17,7 +17,17 @@ import { useAuth } from '@/components/auth/AuthProvider';
 
 type Stage = 'choose' | 'form' | 'confirm';
 
+// Suspense wrapper required because useSearchParams() in client components
+// can't be statically prerendered. See Next.js 15 docs.
 export default function SignupPage() {
+  return (
+    <Suspense fallback={null}>
+      <SignupContent />
+    </Suspense>
+  );
+}
+
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get('redirect') || '/';
