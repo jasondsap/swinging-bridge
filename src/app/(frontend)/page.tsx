@@ -11,7 +11,7 @@ export default function HomePage() {
             Clay County, Kentucky
           </p>
           <h1 className="mt-2 font-display text-3xl font-bold leading-tight">
-            Just'a Swingin' — discover the Land of Swinging Bridges
+            Swinging Bridges of Clay County
           </h1>
           <p className="mt-3 text-bridge-mist">
             Seven restored bridges, miles of mountain rivers, and the romance of Appalachian
