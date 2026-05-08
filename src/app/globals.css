@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet base styles — required for the map to render correctly */
+@import 'leaflet/dist/leaflet.css';
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    @apply bg-bridge-paper text-bridge-ink antialiased;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Respect mobile safe areas (notch / home indicator) */
+    padding-top: env(safe-area-inset-top);
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
+  /* Disable text selection on UI chrome (feels native on mobile) */
+  button,
+  nav,
+  header {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply mx-auto w-full max-w-2xl px-4;
+  }
+
+  /* Small-caps metadata label (e.g. "KY 11 · GOOSE CREEK") */
+  .label-meta {
+    @apply font-sans text-[0.7rem] font-semibold uppercase tracking-small-caps text-bridge-stone;
+  }
+
+  /* Hand-drawn underline for emphasis */
+  .underline-stroke {
+    background-image: linear-gradient(180deg, transparent 65%, rgba(244, 196, 48, 0.5) 65%, rgba(244, 196, 48, 0.5) 90%, transparent 90%);
+    padding: 0 0.05em;
+  }
+}
+
+/* Leaflet pin styling — using DivIcon for custom SVG pins */
+.bridge-pin {
+  background: transparent !important;
+  border: none !important;
+}
+.leaflet-container {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.leaflet-popup-content {
+  margin: 0.75rem;
+}

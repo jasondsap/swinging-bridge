@@ -1,0 +1,17 @@
+/* Payload v3 admin custom styles.
+ *
+ * The @layer declaration is REQUIRED — it establishes the CSS cascade
+ * order Payload expects. Payload's internal CSS uses
+ * `@layer payload-default { ... }` and `@layer payload { ... }` rules,
+ * and without this declaration their specificity collapses and the
+ * admin renders unstyled.
+ *
+ * Add any custom overrides BELOW the layer declaration, in the
+ * `@layer payload` block.
+ */
+
+@layer payload-default, payload;
+
+@layer payload {
+  /* Custom overrides go here — kept empty for now. */
+}
