@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig, Where } from 'payload';
 
 export const Itineraries: CollectionConfig = {
   slug: 'itineraries',
@@ -11,12 +11,17 @@ export const Itineraries: CollectionConfig = {
     read: ({ req }) => {
       if (!req.user) return false;
       if (req.user.role === 'admin') return true;
-      return {
+      // Explicit Where typing — TypeScript narrows object literals in the
+      // `or` array to types with `undefined` siblings (e.g. `isPublic?: undefined`),
+      // which fails Payload's index-signature constraint. Annotating each entry
+      // as `Where` widens it cleanly.
+      const filter: Where = {
         or: [
-          { user: { equals: req.user.id } },
-          { isPublic: { equals: true } },
+          { user: { equals: req.user.id } } as Where,
+          { isPublic: { equals: true } } as Where,
         ],
       };
+      return filter;
     },
     create: ({ req }) => Boolean(req.user),
     update: ({ req }) => {
