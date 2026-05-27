@@ -3,14 +3,12 @@
 import { Suspense, useState, type FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Apple, Loader2, Mail, MailCheck } from 'lucide-react';
+import { Loader2, Mail, MailCheck } from 'lucide-react';
 
 import {
   confirmSignUpCode,
   resendCode,
-  signInWithApple,
   signInWithEmail,
-  signInWithGoogle,
   signUpWithEmail,
 } from '@/lib/auth/cognito';
 import { useAuth } from '@/components/auth/AuthProvider';
@@ -41,35 +39,6 @@ function SignupContent() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-
-  // ─── Social ────────────────────────────────────────────
-  async function handleApple() {
-    setBusy(true);
-    setError(null);
-    try {
-      await signInWithApple();
-      await refresh();
-      router.push(redirectTo);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign-up failed');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function handleGoogle() {
-    setBusy(true);
-    setError(null);
-    try {
-      await signInWithGoogle();
-      await refresh();
-      router.push(redirectTo);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign-up failed');
-    } finally {
-      setBusy(false);
-    }
-  }
 
   // ─── Email + password create ─────────────────────────────
   async function handleCreate(e: FormEvent) {
@@ -187,27 +156,6 @@ function SignupContent() {
       {/* Stage: choose method */}
       {stage === 'choose' && (
         <div className="mt-6 space-y-3">
-          <button
-            type="button"
-            onClick={handleApple}
-            disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-black px-4 py-3 font-sans font-semibold text-white shadow-paper disabled:opacity-50"
-          >
-            <Apple className="h-5 w-5" />
-            <span>Sign up with Apple</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-bridge-stone/30 bg-white px-4 py-3 font-sans font-semibold text-bridge-ink shadow-paper disabled:opacity-50"
-          >
-            <span className="font-display text-lg leading-none">G</span>
-            <span>Sign up with Google</span>
-          </button>
-
-          <Divider />
-
           <button
             type="button"
             onClick={() => setStage('form')}
@@ -385,15 +333,5 @@ function Field({
       <div className="mt-1">{children}</div>
       {hint && <p className="mt-1 text-xs text-bridge-stone">{hint}</p>}
     </label>
-  );
-}
-
-function Divider() {
-  return (
-    <div className="flex items-center gap-3 py-1">
-      <span className="h-px flex-1 bg-bridge-stone/25" />
-      <span className="label-meta">or</span>
-      <span className="h-px flex-1 bg-bridge-stone/25" />
-    </div>
   );
 }
