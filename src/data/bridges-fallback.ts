@@ -42,14 +42,14 @@ export interface FallbackBridge {
 export const FALLBACK_BRIDGES: FallbackBridge[] = [
   // ─── RESTORED — SAFE TO CROSS ─────────────────────────────────────
   {
-    slug: 'goose-creek',
-    name: 'Goose Creek Bridge',
+    slug: 'jockey-street',
+    name: 'Jockey Street Bridge',
     alternateName: 'The Bridge to our Future',
     status: 'restored',
     shortDescription:
       "Spans Goose Creek in the heart of downtown Manchester. The most accessible of all Clay County's swinging bridges.",
     description:
-      "Goose Creek Bridge stands at the eastern end of Bridge Street in downtown Manchester, where the road meets the water. Locally known as 'The Bridge to our Future,' it's the easiest of the seven restored bridges to visit — you can park near the courthouse and walk right to it. From the east end, a short trail leads south along the River Walk to the Goose Creek Salt Works Village, the most historic site in Clay County.",
+      "Jockey Street Bridge stands at the eastern end of Bridge Street in downtown Manchester, where the road meets the water. Locally known as 'The Bridge to our Future,' it's the easiest of the seven restored bridges to visit — you can park near the courthouse and walk right to it. From the east end, a short trail leads south along the River Walk to the Goose Creek Salt Works Village, the most historic site in Clay County.",
     location: {
       latitude: 37.1535,
       longitude: -83.759,

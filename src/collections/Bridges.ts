@@ -24,7 +24,7 @@ export const Bridges: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
-      admin: { description: 'e.g., "Goose Creek Bridge"' },
+      admin: { description: 'e.g., "Jockey Street Bridge"' },
     },
     {
       name: 'slug',
@@ -32,7 +32,7 @@ export const Bridges: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
-      admin: { description: 'URL slug, e.g., "goose-creek"' },
+      admin: { description: 'URL slug, e.g., "jockey-street"' },
     },
     {
       name: 'alternateName',

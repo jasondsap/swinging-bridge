@@ -64,7 +64,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     shortDescription:
       'Regionally famous diner — rated #4 best burger in Kentucky in 2021. Operating since 1949.',
     description:
-      "Originally a pool hall, Pat's Snack Bar has been serving up burgers and short-order classics since 1949. The kind of place where the booths haven't moved in decades and locals greet you by name. Park downtown after walking the Goose Creek Swinging Bridge and grab a bite — you can't visit Manchester without stopping in.",
+      "Originally a pool hall, Pat's Snack Bar has been serving up burgers and short-order classics since 1949. The kind of place where the booths haven't moved in decades and locals greet you by name. Park downtown after walking the Jockey Street Swinging Bridge and grab a bite — you can't visit Manchester without stopping in.",
     location: {
       latitude: 37.151,
       longitude: -83.762,
@@ -74,7 +74,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     contact: { phone: '(606) 599-0199' },
     priceRange: '1',
     featured: true,
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
   {
@@ -122,7 +122,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     },
     priceRange: '1',
     featured: true,
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
   {
@@ -307,7 +307,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     },
     priceRange: 'free',
     featured: true,
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
   {
@@ -317,7 +317,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     shortDescription:
       "Recreation of Clay County's most historic site — the first salt works on Goose Creek and the seat of the first county government in 1807.",
     description:
-      "The most historic site in Clay County — a recreation of the first salt works on Goose Creek and the location of the first county government in 1807. Reachable by car, or by an easy half-mile hike south along the River Walk from the east end of the Goose Creek Swinging Bridge. Pair it with a stop at Pat's Snack Bar back in town for the full local experience.",
+      "The most historic site in Clay County — a recreation of the first salt works on Goose Creek and the location of the first county government in 1807. Reachable by car, or by an easy half-mile hike south along the River Walk from the east end of the Jockey Street Swinging Bridge. Pair it with a stop at Pat's Snack Bar back in town for the full local experience.",
     location: {
       latitude: 37.148,
       longitude: -83.752,
@@ -325,7 +325,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
     },
     priceRange: 'free',
     featured: true,
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
   {
@@ -441,7 +441,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
       community: 'Manchester',
     },
     priceRange: 'free',
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
   {
@@ -525,7 +525,7 @@ export const FALLBACK_PLACES: FallbackPlace[] = [
       community: 'Downtown Manchester',
     },
     priceRange: 'free',
-    nearbyBridges: ['goose-creek'],
+    nearbyBridges: ['jockey-street'],
     coordinatesVerified: false,
   },
 ];
