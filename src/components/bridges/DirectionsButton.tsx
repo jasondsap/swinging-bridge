@@ -53,7 +53,7 @@ export function DirectionsButton({
 
   return (
     <a
-      href={directionsUrl(latitude, longitude, label)}
+      href={directionsUrl(latitude, longitude)}
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}

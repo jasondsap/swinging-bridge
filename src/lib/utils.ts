@@ -21,19 +21,20 @@ export function formatPhone(raw?: string | null): string {
 }
 
 /**
- * Build a directions URL that opens in the user's preferred maps app.
+ * Build a Google Maps directions URL to a coordinate, using the official
+ * Maps URLs API. It works everywhere and respects the user's default app on
+ * mobile.
  *
- * Strategy: use the universal Google Maps URL on web — it works everywhere
- * and respects the user's default app on mobile. For iOS specifically, we
- * could special-case Apple Maps, but in practice the universal link does
- * the right thing in iOS Safari (offers a choice between Maps/Google Maps).
+ * `destination` must be either a place name OR bare `lat,lng`. Appending a
+ * "(Label)" suffix (that's the Android geo: syntax, not the web one) breaks
+ * coordinate parsing — Google then geocodes the whole string and lands on the
+ * wrong place, so the label is intentionally NOT included here.
  *
- * On native Capacitor builds, we'll override this to use the geo: scheme
- * (Android) or maps:// scheme (iOS) for a smoother native handoff.
+ * On native Capacitor builds we override this with the geo:/maps:// schemes
+ * (see nativeMapsUrl) for a smoother handoff to the OS maps app.
  */
-export function directionsUrl(lat: number, lng: number, label?: string): string {
-  const q = label ? `${lat},${lng}(${encodeURIComponent(label)})` : `${lat},${lng}`;
-  return `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+export function directionsUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 }
 
 /**
@@ -42,13 +43,14 @@ export function directionsUrl(lat: number, lng: number, label?: string): string 
  */
 export function nativeMapsUrl(lat: number, lng: number, label?: string, platform?: 'ios' | 'android' | 'web'): string {
   if (platform === 'ios') {
-    const q = label ? `${encodeURIComponent(label)}` : '';
-    return `maps://?daddr=${lat},${lng}&q=${q}`;
+    // Apple Maps: directions to the coordinate. daddr takes a bare lat,lng.
+    return `maps://?daddr=${lat},${lng}`;
   }
   if (platform === 'android') {
+    // Android geo URI: a labeled pin the user can tap to start directions.
     return `geo:${lat},${lng}?q=${lat},${lng}${label ? `(${encodeURIComponent(label)})` : ''}`;
   }
-  return directionsUrl(lat, lng, label);
+  return directionsUrl(lat, lng);
 }
 
 /**
