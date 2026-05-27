@@ -3,13 +3,9 @@
 import { Suspense, useState, type FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Apple, Loader2, Mail } from 'lucide-react';
+import { Loader2, Mail } from 'lucide-react';
 
-import {
-  signInWithApple,
-  signInWithEmail,
-  signInWithGoogle,
-} from '@/lib/auth/cognito';
+import { signInWithEmail } from '@/lib/auth/cognito';
 import { useAuth } from '@/components/auth/AuthProvider';
 
 /**
@@ -48,34 +44,6 @@ function LoginContent() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-
-  async function handleApple() {
-    setError(null);
-    setBusy(true);
-    try {
-      await signInWithApple();
-      await refresh();
-      router.push(redirectTo);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign-in failed');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function handleGoogle() {
-    setError(null);
-    setBusy(true);
-    try {
-      await signInWithGoogle();
-      await refresh();
-      router.push(redirectTo);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign-in failed');
-    } finally {
-      setBusy(false);
-    }
-  }
 
   async function handleEmailLogin(e: FormEvent) {
     e.preventDefault();
@@ -125,24 +93,6 @@ function LoginContent() {
 
       {mode === 'choose' && (
         <div className="mt-6 space-y-3">
-          <button
-            type="button"
-            onClick={handleApple}
-            disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-black px-4 py-3 font-sans font-semibold text-white shadow-paper disabled:opacity-50"
-          >
-            <Apple className="h-5 w-5" />
-            <span>Continue with Apple</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-bridge-stone/30 bg-white px-4 py-3 font-sans font-semibold text-bridge-ink shadow-paper disabled:opacity-50"
-          >
-            <span className="font-display text-lg leading-none">G</span>
-            <span>Continue with Google</span>
-          </button>
           <button
             type="button"
             onClick={() => setMode('email')}
