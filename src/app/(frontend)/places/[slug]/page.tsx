@@ -112,6 +112,21 @@ export default function PlaceDetailPage() {
         </Link>
       </div>
 
+      {/* Hero photo — only when the place has one uploaded */}
+      {place.heroImage?.url && (
+        <div className="container-app pt-3">
+          <div className="relative h-60 w-full overflow-hidden rounded-xl border border-bridge-stone/15 shadow-paper sm:h-72">
+            {/* eslint-disable-next-line @next/next/no-img-element -- Payload pre-crops the
+                hero size (1600x900); a plain <img> renders reliably in the Capacitor WebView. */}
+            <img
+              src={place.heroImage.url}
+              alt={place.heroImage.alt || place.name}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Hero block */}
       <header className="container-app pt-3">
         <div className="flex items-center gap-2">

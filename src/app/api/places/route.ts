@@ -28,10 +28,30 @@ export async function GET() {
   }
 }
 
+/**
+ * Pull usable image URLs out of a populated `heroImage` relation. With
+ * depth >= 1, Payload replaces the relation id with the full media doc, which
+ * carries `url` plus a `sizes` map of the generated crops. Returns null when
+ * there's no image (the UI then falls back to the placeholder / omits the hero).
+ */
+function normalizeHeroImage(value: unknown): FallbackPlace['heroImage'] {
+  if (!value || typeof value !== 'object') return null;
+  const media = value as Record<string, unknown>;
+  const sizes = (media.sizes as Record<string, { url?: string }>) || {};
+  const url = sizes.hero?.url || (media.url as string | undefined);
+  if (!url) return null;
+  return {
+    url,
+    cardUrl: sizes.card?.url || (media.url as string | undefined) || url,
+    alt: (media.alt as string | undefined) || undefined,
+  };
+}
+
 function normalizeCmsPlace(doc: Record<string, unknown>): FallbackPlace {
   const loc = (doc.location as Record<string, unknown>) || {};
   const contact = (doc.contact as Record<string, unknown>) || {};
   return {
+    heroImage: normalizeHeroImage(doc.heroImage),
     slug: doc.slug as string,
     name: doc.name as string,
     placeType: (doc.placeType as FallbackPlace['placeType']) || 'attraction',

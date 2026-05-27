@@ -52,6 +52,17 @@ export interface FallbackPlace {
   featured?: boolean;
   /** Slugs of bridges within reasonable driving distance — used for cross-linking */
   nearbyBridges?: string[];
+  /**
+   * Photo uploaded via the CMS, if any. Absent on fallback data and on places
+   * without a photo yet — the card draws the SVG placeholder and the detail
+   * page omits the hero band. `url` is the 16:9 hero crop; `cardUrl` is the
+   * 4:3 card crop.
+   */
+  heroImage?: {
+    url: string;
+    cardUrl?: string;
+    alt?: string;
+  } | null;
   coordinatesVerified: boolean;
 }
 

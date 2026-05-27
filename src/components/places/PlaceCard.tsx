@@ -31,7 +31,17 @@ export function PlaceCard({ place, distanceMi, compact, hideFavorite, className 
             compact ? 'h-28' : 'h-40',
           )}
         >
-          <PlacePhoto place={place} />
+          {place.heroImage?.cardUrl || place.heroImage?.url ? (
+            // eslint-disable-next-line @next/next/no-img-element -- Payload pre-crops the
+            // card size (640x480); a plain <img> renders reliably in the Capacitor WebView.
+            <img
+              src={place.heroImage.cardUrl || place.heroImage.url}
+              alt={place.heroImage.alt || place.name}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <PlacePhoto place={place} />
+          )}
           <div className="absolute right-3 top-3">
             <PlaceTypeBadge type={place.placeType} size={compact ? 'sm' : 'md'} />
           </div>
