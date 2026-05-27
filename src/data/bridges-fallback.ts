@@ -179,40 +179,6 @@ export const FALLBACK_BRIDGES: FallbackBridge[] = [
 
   // ─── PHOTOGRAPH-ONLY — VIEW FROM A DISTANCE ──────────────────────
   {
-    slug: 'barbourville-road',
-    name: 'Barbourville Road Bridge',
-    status: 'photograph_only',
-    shortDescription:
-      'A historic unrestored bridge along KY 11 near the Clay/Knox County line, by Antioch Church.',
-    description:
-      "An evocative reminder of how many of these bridges once looked. The Barbourville Road bridge has not been restored and is unsafe to cross, but its silhouette against the Kentucky hills makes for a memorable photograph. View from Antioch Church or the roadside.",
-    location: {
-      latitude: 37.075,
-      longitude: -83.84,
-      nearestCommunity: 'Manchester (south, near Knox County line)',
-      directions: 'On KY 11 near the Clay/Knox County line, near Antioch Church.',
-    },
-    tags: ['historic', 'scenic'],
-    coordinatesVerified: false,
-  },
-  {
-    slug: 'martin-cemetery-road',
-    name: 'Martin Cemetery Road Bridge',
-    status: 'photograph_only',
-    shortDescription:
-      'An unrestored bridge along KY 66, near the Antepast Swinging Bridge — a natural pairing for photographers.',
-    description:
-      "Often photographed on the same day as Antepast. Martin Cemetery Road sits between Oneida and Big Creek along KY 66 — view from the road. Not safe to cross.",
-    location: {
-      latitude: 37.26,
-      longitude: -83.57,
-      nearestCommunity: 'Between Oneida and Big Creek',
-      directions: 'On KY 66 between the communities of Oneida and Big Creek. Near the Antepast Swinging Bridge.',
-    },
-    tags: ['historic', 'scenic'],
-    coordinatesVerified: false,
-  },
-  {
     slug: 'laurel-branch-road',
     name: 'Laurel Branch Road Bridge',
     status: 'photograph_only',
@@ -262,6 +228,42 @@ export const FALLBACK_BRIDGES: FallbackBridge[] = [
     coordinatesVerified: false,
   },
 ];
+
+/**
+ * Canonical display order for the bridge list:
+ *   1. Restored (open to walk) bridges first, then photograph-only, then closed.
+ *   2. Within the open group, Jockey Street leads (closest to downtown
+ *      Manchester) and Farmer Road trails (a board blocks its entrance).
+ *   3. Everything else keeps its incoming order.
+ *
+ * Applied by /api/bridges and the bridge list so web and mobile match,
+ * regardless of the order Payload happens to return documents in.
+ */
+const STATUS_DISPLAY_RANK: Record<BridgeStatus, number> = {
+  restored: 0,
+  photograph_only: 1,
+  closed: 2,
+};
+
+const SLUG_DISPLAY_RANK: Record<string, number> = {
+  'jockey-street': -1,
+  'farmer-road': 1,
+};
+
+export function sortBridgesForDisplay(bridges: FallbackBridge[]): FallbackBridge[] {
+  return bridges
+    .map((bridge, index) => ({ bridge, index }))
+    .sort((a, b) => {
+      const byStatus =
+        STATUS_DISPLAY_RANK[a.bridge.status] - STATUS_DISPLAY_RANK[b.bridge.status];
+      if (byStatus !== 0) return byStatus;
+      const bySlug =
+        (SLUG_DISPLAY_RANK[a.bridge.slug] ?? 0) - (SLUG_DISPLAY_RANK[b.bridge.slug] ?? 0);
+      if (bySlug !== 0) return bySlug;
+      return a.index - b.index; // stable: preserve incoming order
+    })
+    .map((entry) => entry.bridge);
+}
 
 /**
  * Compute the bounding box that contains all bridges — used by the map view

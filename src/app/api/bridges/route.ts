@@ -1,7 +1,11 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
 
-import { FALLBACK_BRIDGES, type FallbackBridge } from '@/data/bridges-fallback';
+import {
+  FALLBACK_BRIDGES,
+  sortBridgesForDisplay,
+  type FallbackBridge,
+} from '@/data/bridges-fallback';
 
 export const runtime = 'nodejs';
 
@@ -24,19 +28,20 @@ export async function GET() {
       collection: 'bridges',
       limit: 100,
       depth: 1, // include hero image media
+      sort: 'createdAt', // stable base order; display sort runs on top
     });
 
     if (result.docs.length > 0) {
       return Response.json({
         source: 'cms',
-        bridges: result.docs.map(normalizeCmsBridge),
+        bridges: sortBridgesForDisplay(result.docs.map(normalizeCmsBridge)),
       });
     }
 
     // CMS is empty → use the fallback
     return Response.json({
       source: 'fallback',
-      bridges: FALLBACK_BRIDGES,
+      bridges: sortBridgesForDisplay(FALLBACK_BRIDGES),
     });
   } catch (err) {
     // Payload itself failed (DB down, missing env, etc.) — never let
@@ -44,7 +49,7 @@ export async function GET() {
     console.error('[api/bridges] Payload query failed, serving fallback:', err);
     return Response.json({
       source: 'fallback-error',
-      bridges: FALLBACK_BRIDGES,
+      bridges: sortBridgesForDisplay(FALLBACK_BRIDGES),
     });
   }
 }

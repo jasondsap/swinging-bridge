@@ -8,6 +8,7 @@ import { BridgeCard } from '@/components/bridges/BridgeCard';
 import { ViewToggle } from '@/components/bridges/ViewToggle';
 import {
   FALLBACK_BRIDGES,
+  sortBridgesForDisplay,
   type FallbackBridge,
 } from '@/data/bridges-fallback';
 import { getCurrentPosition } from '@/lib/capacitor';
@@ -46,7 +47,7 @@ export default function BridgesPage() {
   // Filter + distance-sort
   const visibleBridges = useMemo(() => {
     const filtered = filter === 'all' ? bridges : bridges.filter((b) => b.status === filter);
-    if (!userLocation) return filtered;
+    if (!userLocation) return sortBridgesForDisplay(filtered);
     return [...filtered].sort((a, b) => {
       const da = haversineMiles(userLocation, a.location);
       const db = haversineMiles(userLocation, b.location);
@@ -71,7 +72,7 @@ export default function BridgesPage() {
           The <span className="underline-stroke">Swinging Bridges</span>
         </h1>
         <p className="mt-2 text-bridge-ink/75">
-          Twelve historic crossings — seven restored and open to walk, five preserved as photograph-only relics. All within a day's drive of downtown Manchester.
+          Ten historic crossings — seven restored and open to walk, three preserved as photograph-only relics. All within a day's drive of downtown Manchester.
         </p>
       </div>
 
