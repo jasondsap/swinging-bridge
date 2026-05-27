@@ -55,6 +55,25 @@ export async function GET() {
 }
 
 /**
+ * Pull the usable image URLs out of a populated `heroImage` relation.
+ * With depth >= 1, Payload replaces the relation id with the full media doc,
+ * which carries `url` plus a `sizes` map of the generated crops. Returns null
+ * when there's no image (the UI then falls back to the SVG illustration).
+ */
+function normalizeHeroImage(value: unknown): FallbackBridge['heroImage'] {
+  if (!value || typeof value !== 'object') return null;
+  const media = value as Record<string, unknown>;
+  const sizes = (media.sizes as Record<string, { url?: string }>) || {};
+  const url = sizes.hero?.url || (media.url as string | undefined);
+  if (!url) return null;
+  return {
+    url,
+    cardUrl: sizes.card?.url || (media.url as string | undefined) || url,
+    alt: (media.alt as string | undefined) || undefined,
+  };
+}
+
+/**
  * Normalize a Payload CMS bridge document into the same shape as
  * `FallbackBridge`, so the frontend doesn't have to branch on the source.
  */
@@ -62,6 +81,7 @@ function normalizeCmsBridge(doc: Record<string, unknown>): FallbackBridge {
   const loc = (doc.location as Record<string, unknown>) || {};
   const specs = (doc.specs as Record<string, unknown>) || {};
   return {
+    heroImage: normalizeHeroImage(doc.heroImage),
     slug: doc.slug as string,
     name: doc.name as string,
     alternateName: doc.alternateName as string | undefined,

@@ -36,6 +36,16 @@ export interface FallbackBridge {
     maxWeightPounds?: number;
   };
   tags?: string[];
+  /**
+   * Photo uploaded via the CMS, if any. Absent on fallback data and on bridges
+   * that don't have a photo yet — the UI draws the SVG illustration instead.
+   * `url` is the 16:9 hero crop; `cardUrl` is the 4:3 card crop.
+   */
+  heroImage?: {
+    url: string;
+    cardUrl?: string;
+    alt?: string;
+  } | null;
   coordinatesVerified: boolean;
 }
 

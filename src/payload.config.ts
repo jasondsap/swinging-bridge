@@ -1,5 +1,6 @@
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
 import path from 'path';
 import { buildConfig } from 'payload';
 import { fileURLToPath } from 'url';
@@ -60,4 +61,16 @@ export default buildConfig({
       fileSize: 10_000_000, // 10MB
     },
   },
+  plugins: [
+    // Store Media uploads in Vercel Blob. Without this, Payload writes to the
+    // local filesystem, which is ephemeral on Vercel — uploaded photos would
+    // vanish on each deploy. Requires BLOB_READ_WRITE_TOKEN in the environment.
+    vercelBlobStorage({
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    }),
+  ],
 });

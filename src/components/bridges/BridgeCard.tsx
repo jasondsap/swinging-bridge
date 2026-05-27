@@ -45,7 +45,17 @@ export function BridgeCard({ bridge, distanceMi, compact, hideFavorite, classNam
             'bg-gradient-to-br from-bridge-navy via-bridge-sky to-bridge-mist',
           )}
         >
-          <PhotoPlaceholder bridge={bridge} />
+          {bridge.heroImage?.cardUrl || bridge.heroImage?.url ? (
+            // eslint-disable-next-line @next/next/no-img-element -- Payload pre-crops the
+            // card size (640x480); a plain <img> renders reliably in the Capacitor WebView.
+            <img
+              src={bridge.heroImage.cardUrl || bridge.heroImage.url}
+              alt={bridge.heroImage.alt || bridge.name}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <PhotoPlaceholder bridge={bridge} />
+          )}
           <div className="absolute right-3 top-3">
             <BridgeStatusBadge status={bridge.status} size={compact ? 'sm' : 'md'} />
           </div>

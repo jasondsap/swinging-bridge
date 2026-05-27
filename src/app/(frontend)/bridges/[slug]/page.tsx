@@ -67,7 +67,17 @@ export default function BridgeDetailPage() {
     <div className="pb-12">
       {/* Hero */}
       <section className="relative h-72 overflow-hidden bg-gradient-to-br from-bridge-navy via-bridge-sky to-bridge-mist">
-        <BridgeIllustration bridge={bridge} />
+        {bridge.heroImage?.url ? (
+          // eslint-disable-next-line @next/next/no-img-element -- Payload pre-crops the
+          // hero size (1600x900); a plain <img> renders reliably in the Capacitor WebView.
+          <img
+            src={bridge.heroImage.url}
+            alt={bridge.heroImage.alt || bridge.name}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <BridgeIllustration bridge={bridge} />
+        )}
         <Link
           href="/bridges"
           className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-bridge-navy shadow-paper"
